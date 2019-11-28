@@ -1,0 +1,54 @@
+#map
+%script{:charset => "utf-8", :src => "[yahooAPIキー]", :type => "text/javascript"}
+:javascript
+  var map;            //地図オブジェクト
+  var stylemaplayer;  //スタイル地図レイヤー
+  var layerset;       //レイヤーセット
+  /**
+   * window.onloadイベントにて地図の読込処理を行います。
+   */
+   //マーカー設置機能
+  
+  window.onload = function() {
+      map = new Y.Map("map",{"configure":{"scrollWheelZoom":true}});
+      //スタイル地図レイヤーを生成します。
+      stylemaplayer = new Y.StyleMapLayer("railway");
+      setStyle();
+      //レイヤーセットを作成します。
+      layerset = new Y.LayerSet("スタイル地図", [stylemaplayer]);
+      //Mapオブジェクトにレイヤーセットを追加します。
+      map.addLayerSet("stylemap",layerset);
+      //地図を描画します。
+      map.drawMap(new Y.LatLng(35.680840,139.767009), 13 , "stylemap");
+      
+      var icon = new Y.Icon('/assets/station.png');
+      var markers = []
+      //ここでeach do的なロジックとpostテーブルのデータを使うとすべての駅のマーカーを表示できるかも
+      markers.push(new Y.Marker(new Y.LatLng(35.681236,139.767125),{icon: icon}));
+      markers.push(new Y.Marker(new Y.LatLng(35.691574,139.704647),{icon: icon}));
+      map.addFeatures(markers);
+      
+
+  }
+
+  /**
+   * スタイルを設定します。
+   */
+  function setStyle() {
+      var param = [
+      {"address":false},
+      {"landmark":false},
+      {"line_name":false},
+      {"station_name":false},
+      {"symbol":false},
+      {"area_name":false},
+      {"building":false},
+      {"boundary":false},
+      {"background":false},
+      {"railway":true},
+      {"water":true},
+      {"jr_st_name":false}
+      ];
+      //スタイルを設定します。
+      stylemaplayer.setStyle(param);
+  }
